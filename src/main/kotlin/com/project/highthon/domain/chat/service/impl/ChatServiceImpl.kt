@@ -49,16 +49,4 @@ class ChatServiceImpl(
         return roomUser.map { RoomResponse(it.room.id, it.user.name, it.room.lastMessage) }
     }
 
-    @Transactional(rollbackFor = [Exception::class])
-    override fun sendChat(request: SendChatRequest, file: MultipartFile) {
-        val room = roomRepository.findRoomById(request.roomId) ?: throw RuntimeException()
-        if(!file.isEmpty) {
-            val url = "https://mzip-s3-bucket.s3.ap-northeast-2.amazonaws.com/REELS" + s3Service.uploadFile(file, "CHAT/")
-            chatRepository.save(Chat(-1, url, userUtil.currentUser(), room))
-            room.updateLastMessage(url)
-        }
-        chatRepository.save(request.toEntity(userUtil.currentUser(), room))
-        room.updateLastMessage(request.message)
-    }
-
 }

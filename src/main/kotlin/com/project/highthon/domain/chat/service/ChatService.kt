@@ -10,6 +10,5 @@ interface ChatService {
     fun createChattingRoom(userId: Long)
     fun findAllMessage(roomId: Long): List<ChatResponse>
     fun findAllMyRoom(): List<RoomResponse>
-    fun sendChat(request: SendChatRequest, file: MultipartFile)
 
 }
